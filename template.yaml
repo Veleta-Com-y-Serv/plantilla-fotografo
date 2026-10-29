@@ -1,0 +1,85 @@
+# Metadatos de la plantilla para el catálogo de NoExpertise.
+id: fotografo
+nombre: Fotografía y vídeo
+descripcion: Web oscura para fotógrafos y productoras de vídeo, con galería a borde completo y sesiones con precio.
+sectores:
+  - { id: fotografia, nombre: Fotografía }
+  - { id: fotografo, nombre: Fotógrafo }
+  - { id: video, nombre: Vídeo }
+  - { id: productora, nombre: Productora audiovisual }
+  - { id: estudio-fotografico, nombre: Estudio fotográfico }
+secciones:
+  - { id: hero, nombre: Portada }
+  - { id: galeria, nombre: Trabajo }
+  - { id: sesiones, nombre: Sesiones y precios }
+  - { id: sobre, nombre: El estudio }
+  - { id: proceso, nombre: Cómo trabajo }
+  - { id: opiniones, nombre: Opiniones }
+  - { id: cta, nombre: Llamada a la acción }
+  - { id: preguntas, nombre: Preguntas frecuentes }
+  - { id: contacto, nombre: Contacto }
+estilo: oscuro
+plan_minimo: gratis
+version: 1.0.0
+base: astrowind
+demo_url: https://demo-plantilla-fotografo.noexpertise.com
+activa: true
+orden: 210
+
+# Asistente de puesta en marcha (NoExpertise): un paso por pantalla. Rutas del site sin índices;
+# tipos: texto y lista (la IA propone), datos, fotos, eleccion (colores y logo) y repaso.
+asistente:
+  - id: negocio
+    titulo: "Tu estudio"
+    pregunta: "¿Cómo se llama tu estudio y qué fotografías o grabas?"
+    ayuda: "Retratos, bodas, familias, producto, vídeo para empresas… y dónde trabajas."
+    tipo: texto
+    campos: [nombre, eslogan, secciones.hero.antetitulo, secciones.hero.titulo, secciones.hero.texto, seo.titulo, seo.descripcion]
+  - id: contacto
+    titulo: "Cómo te encuentran"
+    pregunta: "¿Dónde está tu estudio y cómo te pueden llamar o escribir?"
+    ayuda: "Solo lo que quieras que vean tus clientes. Lo que dejes vacío no sale en tu web."
+    tipo: datos
+    campos: [contacto.telefono, contacto.whatsapp, contacto.email, contacto.direccion, contacto.horario, redes.instagram, redes.facebook]
+  - id: sesiones
+    titulo: "Tus sesiones"
+    pregunta: "¿Qué sesiones o servicios ofreces? Nombre, cuánto dura, qué incluye y el precio si quieres. Uno por línea."
+    ayuda: "Si prefieres dar precio a medida, déjalo sin precio. Las fotos las pones luego en Contenido."
+    tipo: lista
+    campos: [secciones.sesiones.sesiones]
+  - id: sobre
+    titulo: "Quién eres"
+    pregunta: "Cuéntame tu historia y tu forma de trabajar. ¿Hay una frase que te defina?"
+    tipo: texto
+    campos: [secciones.sobre.titulo, secciones.sobre.texto, secciones.sobre.declaracion]
+  - id: equipo
+    titulo: "Tu equipo"
+    pregunta: "¿Quién forma el estudio? Nombre y qué hace cada uno, uno por línea."
+    ayuda: "Si trabajas solo, pon solo tu nombre."
+    tipo: lista
+    campos: [secciones.sobre.personas]
+  - id: proceso
+    titulo: "Cómo trabajas"
+    pregunta: "¿Cómo es una sesión contigo, de la primera charla a la entrega?"
+    tipo: texto
+    campos: [secciones.proceso.titulo, secciones.proceso.items]
+  - id: preguntas
+    titulo: "Preguntas frecuentes"
+    pregunta: "¿Qué te preguntan más a menudo? Escribe cada pregunta y lo que respondes."
+    ayuda: "Plazos de entrega, cómo se reserva, qué pasa si llueve…"
+    tipo: lista
+    campos: [secciones.preguntas.preguntas]
+  - id: fotos
+    titulo: "Tus fotos"
+    pregunta: "Pon tu mejor foto de portada y las de tu galería de trabajo."
+    ayuda: "Sube las tuyas o elige una del banco. Las que no cambies se quedan como están."
+    tipo: fotos
+    campos: [secciones.hero.imagen, secciones.galeria.galeria, secciones.sobre.imagen, secciones.cta.imagen]
+  - id: aspecto
+    titulo: "Colores y logo"
+    pregunta: "Elige los colores de tu web y, si tienes, tu logo."
+    tipo: eleccion
+    campos: [colores.primario, colores.acento, logo]
+  - id: repaso
+    titulo: "Repaso"
+    tipo: repaso

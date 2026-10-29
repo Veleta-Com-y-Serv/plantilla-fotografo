@@ -1,0 +1,61 @@
+---
+// Hero «visor»: foto a sangre a pantalla completa con marcas de visor, el nombre del estudio en mayúsculas
+// enormes, el título debajo, un párrafo corto y dos botones (cta y cta_secundario).
+// Sin foto, banda oscura plena con el mismo texto.
+import { seccion, site } from '../../data/site';
+import { altHero, localidad } from '../../lib/seo';
+import Imagen from '../ui/Imagen.astro';
+interface Props { id: string; primera?: boolean }
+const { id, primera = false } = Astro.props;
+const s = seccion(id);
+const conFoto = !!s?.imagen;
+const lugar = localidad();
+---
+
+{
+  s && (
+    <section id={id} class:list={['hero relative isolate flex min-h-[100svh] flex-col overflow-hidden', conFoto ? 'hero--foto' : 'banda-oscura']}>
+      {conFoto && (
+        <>
+          <Imagen src={s.imagen} alt={altHero()} ancho={1920} alto={1080} prioridad={primera} class="absolute inset-0 -z-20 h-full w-full object-cover" />
+          <div class="hero-velo absolute inset-0 -z-10" aria-hidden="true" />
+        </>
+      )}
+      <div class="visor hidden md:block" aria-hidden="true" style="--visor-margen: 6rem 2rem 2rem"><span /></div>
+      <div class="contenedor relative mt-auto pb-10 pt-32 md:pb-16 md:pt-40">
+        <div class="mono flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+          {(s.antetitulo || site.sector) && <p class="antetitulo">{s.antetitulo || site.sector}</p>}
+          {lugar && (
+            <p class="hidden items-center gap-2 sm:flex">
+              <span class="hero-punto" aria-hidden="true" />
+              {lugar}
+            </p>
+          )}
+        </div>
+        <h1 class="mt-6">
+          <span class="hero-nombre block">{site.nombre}</span>
+          {s.titulo && <span class="hero-titulo serif mt-4 block">{s.titulo}</span>}
+        </h1>
+        <div class="mt-8 grid gap-8 md:mt-10 md:grid-cols-12 md:items-end">
+          {s.texto && <p class="max-w-xl text-lg md:col-span-6 md:text-xl">{s.texto}</p>}
+          {(s.cta?.url || s.cta_secundario?.url) && (
+            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap md:col-span-6 md:justify-end">
+              {s.cta?.url && <a class="btn" href={s.cta.url}>{s.cta.texto}</a>}
+              {s.cta_secundario?.url && <a class="btn-sec" href={s.cta_secundario.url}>{s.cta_secundario.texto}</a>}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .hero--foto { color: #fff; background: #111; }
+  .hero-velo { background: linear-gradient(to top, rgb(0 0 0 / .82) 0%, rgb(0 0 0 / .35) 45%, rgb(0 0 0 / .15) 70%, rgb(0 0 0 / .5) 100%); }
+  .hero-nombre { font-size: clamp(3.25rem, 13.5vw, 11rem); line-height: .84; letter-spacing: -0.045em; overflow-wrap: anywhere; }
+  .hero-titulo { font-size: clamp(1.6rem, 4.2vw, 3.4rem); line-height: 1.08; max-width: 22ch; }
+  .hero-punto { width: .6rem; height: .6rem; border-radius: 50%; background: var(--c-acento); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c-acento) 30%, transparent); animation: latido 2s ease-in-out infinite; }
+  .hero .visor { z-index: 0; }
+  @keyframes latido { 50% { opacity: .35; } }
+</style>

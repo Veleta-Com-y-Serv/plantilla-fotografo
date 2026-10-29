@@ -1,0 +1,50 @@
+---
+// Apartado de texto genérico: banda oscura; con foto, fila 50/50 con la foto a sangre a la derecha; sin foto,
+// título grande y párrafos en dos columnas. Antetítulo, título, párrafos, lista (`items` con icono) y botón.
+// Lo usan los apartados nuevos que pide el cliente (site.yaml: `tipo: texto`).
+import { seccion, parrafos } from '../../data/site';
+import { altSeccion } from '../../lib/seo';
+import Imagen from '../ui/Imagen.astro';
+import Icono from '../ui/Icono.astro';
+interface Props { id: string }
+const s = seccion(Astro.props.id);
+---
+
+{
+  s && (
+    <section id={Astro.props.id} class:list={['banda-oscura grid border-t border-current/15', s.imagen && 'md:grid-cols-2']}>
+      <div class:list={['py-16 md:py-24', s.imagen ? 'px-4 md:px-12 lg:px-20' : 'contenedor']}>
+        <div class:list={[!s.imagen && 'grid gap-10 lg:grid-cols-12']}>
+          <div class:list={[!s.imagen && 'lg:col-span-6']}>
+            {s.antetitulo && <p class="antetitulo">{s.antetitulo}</p>}
+            {s.titulo && <h2 class="titulo-seccion">{s.titulo}</h2>}
+          </div>
+          <div class:list={[!s.imagen ? 'lg:col-span-6 lg:pt-10' : 'max-w-2xl']}>
+            <div class="mt-6 space-y-4 text-lg opacity-85">
+              {parrafos(s.texto).map((p) => <p>{p}</p>)}
+            </div>
+            {s.items.length > 0 && (
+              <ul class="mt-8 border-b border-current/20" role="list">
+                {s.items.map((it) => (
+                  <li class="flex gap-4 border-t border-current/20 py-4">
+                    <Icono nombre={it.icono} class="mt-1 shrink-0 text-acento" tam={22} />
+                    <div>
+                      <p class="font-bold uppercase tracking-wide">{it.titulo}</p>
+                      {it.texto && <p class="mt-1 opacity-75">{it.texto}</p>}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {s.cta?.url && <a class="btn mt-8" href={s.cta.url}>{s.cta.texto}</a>}
+          </div>
+        </div>
+      </div>
+      {s.imagen && (
+        <div class="relative min-h-[20rem] md:min-h-[36rem]">
+          <Imagen src={s.imagen} alt={altSeccion(s)} ancho={1200} alto={1200} class="absolute inset-0 h-full w-full object-cover" />
+        </div>
+      )}
+    </section>
+  )
+}

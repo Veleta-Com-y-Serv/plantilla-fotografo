@@ -1,0 +1,37 @@
+---
+// Preguntas frecuentes: banda oscura; título fijo a la izquierda en escritorio y acordeón nativo <details>
+// a la derecha, sin JavaScript. `preguntas: [{pregunta, respuesta}]`. Sin preguntas no se pinta.
+// También sirve de diseño para apartados nuevos (`tipo: preguntas`).
+import { seccion } from '../../data/site';
+interface Props { id: string }
+const s = seccion(Astro.props.id);
+const preguntas = s ? s.preguntas.filter((p) => p && p.pregunta) : [];
+---
+
+{
+  s && preguntas.length > 0 && (
+    <section id={Astro.props.id} class="banda-oscura seccion">
+      <div class="contenedor grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-5">
+          <div class="lg:sticky lg:top-28">
+            {s.antetitulo && <p class="antetitulo">{s.antetitulo}</p>}
+            {s.titulo && <h2 class="titulo-seccion">{s.titulo}</h2>}
+            {s.texto && <p class="titular-texto mt-6">{s.texto}</p>}
+          </div>
+        </div>
+        <div class="border-b border-current/20 lg:col-span-7">
+          {preguntas.map((p, i) => (
+            <details class="faq border-t border-current/20">
+              <summary class="grid grid-cols-[auto_1fr_auto] items-center gap-4 py-6 md:gap-6 md:py-7">
+                <span class="mono text-acento">{String(i + 1).padStart(2, '0')}</span>
+                <span class="faq-pregunta text-lg font-bold md:text-2xl">{p.pregunta}</span>
+                <span class="faq-signo" aria-hidden="true">+</span>
+              </summary>
+              {p.respuesta && <p class="max-w-2xl pb-8 pl-10 text-lg opacity-80 md:pl-14">{p.respuesta}</p>}
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

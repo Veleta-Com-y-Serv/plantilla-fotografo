@@ -1,0 +1,70 @@
+---
+// Contacto: banda de color (primario) partida; a la izquierda el título enorme, el email como protagonista y
+// los datos (teléfono, WhatsApp, estudio, horario); a la derecha el formulario mailto con «Qué necesitas»
+// (los nombres de las sesiones, si las hay) y la fecha aproximada. `boton` opcional para el texto del botón.
+import { seccion, site, tel, whatsapp, mapa, cadena } from '../../data/site';
+import FormularioContacto from '../ui/FormularioContacto.astro';
+interface Props { id: string }
+const s = seccion(Astro.props.id);
+const c = site.contacto;
+// Opciones del formulario: los nombres de la primera sección de sesiones activa.
+const conSesiones = Object.keys(site.secciones)
+  .map((k) => seccion(k))
+  .find((x) => x && x.sesiones.length > 0);
+const opciones = (conSesiones?.sesiones ?? []).map((x) => cadena(x.nombre)).filter(Boolean);
+const boton = cadena(s?.boton) || 'Enviar';
+---
+
+{
+  s && (
+    <section id={Astro.props.id} class="banda-primario seccion">
+      <div class="contenedor grid gap-14 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-6">
+          {s.antetitulo && <p class="antetitulo">{s.antetitulo}</p>}
+          {s.titulo && <h2 class="titulo-seccion">{s.titulo}</h2>}
+          {s.texto && <p class="mt-6 max-w-lg text-lg opacity-85">{s.texto}</p>}
+          {c.email && (
+            <a href={`mailto:${c.email}`} class="contacto-email enlace mt-10 block">
+              {c.email}
+            </a>
+          )}
+          <dl class="mt-10 grid gap-6 sm:grid-cols-2">
+            {c.telefono && (
+              <div>
+                <dt class="mono opacity-70">Teléfono</dt>
+                <dd class="mt-1 text-lg font-bold"><a class="enlace" href={tel(c.telefono)}>{c.telefono}</a></dd>
+              </div>
+            )}
+            {c.whatsapp && (
+              <div>
+                <dt class="mono opacity-70">WhatsApp</dt>
+                <dd class="mt-1 text-lg font-bold"><a class="enlace" href={whatsapp(c.whatsapp)} rel="noopener" target="_blank">{c.whatsapp}</a></dd>
+              </div>
+            )}
+            {c.direccion && (
+              <div>
+                <dt class="mono opacity-70">Estudio</dt>
+                <dd class="mt-1"><a class="enlace" href={mapa(c.direccion)} rel="noopener" target="_blank">{c.direccion}</a></dd>
+              </div>
+            )}
+            {c.horario && (
+              <div>
+                <dt class="mono opacity-70">Horario</dt>
+                <dd class="mt-1">{c.horario}</dd>
+              </div>
+            )}
+          </dl>
+        </div>
+        <div class="contacto-form lg:col-span-6">
+          <FormularioContacto boton={boton} opciones={opciones} fecha />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .contacto-email { font-family: var(--fuente-titulos); font-weight: 900; font-size: clamp(1.35rem, 4.2vw, 3rem); line-height: 1.05; overflow-wrap: anywhere; letter-spacing: -.02em; }
+  .contacto-form { padding: 1.5rem 1rem; margin-inline: -1rem; background: color-mix(in srgb, currentColor 7%, transparent); border: 1px solid color-mix(in srgb, currentColor 18%, transparent); }
+  @media (min-width: 768px) { .contacto-form { padding: 2.5rem; margin-inline: 0; } }
+</style>

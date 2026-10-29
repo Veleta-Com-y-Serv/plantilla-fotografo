@@ -1,0 +1,135 @@
+# Contenido de la web. Es lo único que rellena la plataforma NoExpertise.
+# Las secciones se muestran en el orden de este fichero. Para ocultar una: activa: false.
+# Apartado nuevo: un id propio (es su ancla, /#id) con `tipo:` = el diseño de otra sección o `texto`.
+# Listas planas: nunca una lista dentro de un elemento de lista. Precios siempre entre comillas.
+nombre: Nordés Estudio
+eslogan: Fotografía y vídeo en Gijón.
+sector: fotografia
+logo: ""          # ruta a una imagen en public/ (p. ej. /logo.svg). Vacío = nombre en mayúsculas.
+colores:
+  primario: "#123039"   # bandas de color (el estudio y el contacto)
+  acento: "#ff5a1f"     # botones, banda de la frase y detalles
+  fondo: "#0c0c0d"      # fondo general (tema oscuro; aguanta uno claro)
+  texto: "#f1ede6"      # texto y bandas claras
+contacto:
+  telefono: "985 31 47 20"
+  email: hola@nordesestudio.es
+  direccion: Calle Cabrales 41, bajo, 33201 Gijón (Asturias)
+  horario: "Lunes a viernes, de 10:00 a 14:00 y de 16:30 a 19:30. Sábados, solo sesiones con cita."
+  whatsapp: "684 21 93 07"
+redes:
+  instagram: https://www.instagram.com/
+  facebook: ""
+  linkedin: ""
+menu:
+  - { texto: Trabajo, url: "/#galeria" }
+  - { texto: Sesiones, url: "/#sesiones" }
+  - { texto: Estudio, url: "/#sobre" }
+  - { texto: Cómo trabajo, url: "/#proceso" }
+  - { texto: Opiniones, url: "/#opiniones" }
+  - { texto: Contacto, url: "/#contacto" }
+boton_cabecera: { texto: Reservar fecha, url: "/#contacto" }
+seo:
+  titulo: Nordés Estudio · Fotografía y vídeo en Gijón
+  descripcion: "Estudio de fotografía y vídeo en Gijón: retratos, familias, bodas y vídeo para empresas, en estudio o en exteriores de la costa asturiana."
+  tipo: ProfessionalService
+marca_pie: true
+
+secciones:
+  hero:
+    activa: true
+    antetitulo: Fotografía y vídeo · Gijón
+    titulo: Luz del norte para tus historias.
+    texto: "Retratos, familias, bodas y vídeo para empresas. Trabajo con luz natural, en el estudio de Cimadevilla o donde tú quieras."
+    imagen: /fotos/hero.jpg
+    cta: { texto: Reservar fecha, url: "/#contacto" }
+    cta_secundario: { texto: Ver trabajo, url: "/#galeria" }
+
+  galeria:
+    activa: true
+    antetitulo: Trabajo reciente
+    titulo: Lo último que ha pasado por la cámara
+    texto: "Una selección de sesiones, bodas y rodajes de este año. Hay más en Instagram."
+    galeria:
+      - /fotos/galeria-1.jpg
+      - /fotos/galeria-2.jpg
+      - /fotos/galeria-3.jpg
+      - /fotos/galeria-4.jpg
+      - /fotos/galeria-5.jpg
+      - /fotos/galeria-6.jpg
+      - /fotos/galeria-7.jpg
+      - /fotos/galeria-8.jpg
+    cta: { texto: Más trabajo en Instagram, url: "https://www.instagram.com/" }
+
+  sesiones:
+    activa: true
+    antetitulo: Sesiones
+    titulo: Elige tu sesión
+    texto: "Precios orientativos con IVA incluido. Si buscas algo distinto, cuéntamelo y te preparo un presupuesto."
+    sesiones:
+      - { nombre: Retrato en estudio, texto: "Una hora tranquila con fondo de papel y luz suave. Para perfiles profesionales, actores o simplemente para tener una foto bonita.", precio: "desde 120 €", duracion: "1 hora", incluye: "Estudio en Cimadevilla; Dos cambios de ropa; 15 fotos editadas; Galería privada en línea", imagen: /fotos/sesion-retrato.jpg, destacado: false }
+      - { nombre: Familia en la playa, texto: "Al atardecer en San Lorenzo o en el Cerro de Santa Catalina. Sin poses forzadas: jugáis, paseáis y yo voy contando la tarde.", precio: "desde 180 €", duracion: "90 minutos", incluye: "Sesión en exteriores de Gijón; 30 fotos editadas; Galería privada para compartir; Copia impresa de regalo", imagen: /fotos/sesion-familia.jpg, destacado: true }
+      - { nombre: Boda, texto: "De los preparativos al primer baile, con discreción. Conozco las fincas y los llagares de la zona y sé cómo cambia aquí la luz.", precio: "desde 1.450 €", duracion: "Día completo", incluye: "Reunión previa y visita al lugar; Reportaje de todo el día; 400 fotos editadas; Álbum de lino de 30 × 30", imagen: /fotos/sesion-boda.jpg, destacado: false }
+      - { nombre: Vídeo para empresas, texto: "Piezas cortas para tu web y tus redes: el taller, el equipo, el producto. Con guion sencillo y sonido cuidado.", precio: "desde 650 €", duracion: "Media jornada", incluye: "Guion y localización; Grabación y sonido; Pieza principal de 90 segundos; Tres cortes verticales para redes", imagen: /fotos/sesion-video.jpg, destacado: false }
+    cta: { texto: Pedir presupuesto, url: "/#contacto" }
+
+  sobre:
+    activa: true
+    antetitulo: El estudio
+    titulo: Una cámara, un barrio y mucho mar.
+    texto: |
+      Nordés nace en 2016 en un bajo de Cimadevilla, a dos calles del puerto. Empezamos con retratos y bodas y hoy grabamos también para talleres, restaurantes y tiendas de toda Asturias.
+
+      Somos un estudio pequeño a propósito: quien hace tu sesión es quien edita tus fotos y quien te las entrega.
+    imagen: /fotos/sobre.jpg
+    declaracion: "No busco la foto perfecta: busco la que dentro de veinte años te haga volver a ese día."
+    personas:
+      - { nombre: Lucía Menéndez, cargo: Fotografía y dirección, foto: /placeholders/persona.svg }
+      - { nombre: Iyán Prendes, cargo: Vídeo y montaje, foto: /placeholders/persona.svg }
+
+  proceso:
+    activa: true
+    antetitulo: Cómo trabajo
+    titulo: De la primera charla a tus fotos
+    items:
+      - { titulo: Hablamos, texto: "Me cuentas qué quieres y para qué. Te propongo lugar, hora y estilo.", icono: mensaje }
+      - { titulo: Reservamos, texto: "Fijamos fecha con una pequeña señal y te mando una guía para preparar la sesión.", icono: calendario }
+      - { titulo: Disparamos, texto: "Una sesión sin prisas. Tú solo tienes que estar; de la luz me encargo yo.", icono: camara }
+      - { titulo: Te lo entrego, texto: "En dos o tres semanas tienes la galería privada lista para descargar y compartir.", icono: descarga }
+
+  opiniones:
+    activa: true
+    antetitulo: Opiniones
+    titulo: Lo que cuentan después
+    testimonios:
+      - { texto: "Odio salir en las fotos y aun así fue una tarde divertidísima. Las de los niños en la orilla las tenemos colgadas en el salón.", autor: Marta y Álex, nota: "Sesión de familia en San Lorenzo" }
+      - { texto: "Casi no les vimos en todo el día, y luego en las fotos estaba todo. Hasta mi abuelo bailando.", autor: Paula y Diego, nota: "Boda en un llagar de Quintueles" }
+      - { texto: "El vídeo del taller nos ha traído más encargos que cualquier anuncio. Lo entendieron a la primera.", autor: Carpintería Rubiera, nota: "Vídeo para empresa" }
+      - { texto: "Necesitaba un retrato para la web y salí con fotos que por fin se parecen a mí.", autor: Elena F., nota: "Retrato en estudio" }
+
+  cta:
+    activa: true
+    antetitulo: Agenda abierta
+    titulo: ¿Tienes una fecha en mente?
+    texto: "Los sábados de primavera y verano vuelan. Escríbeme y te digo enseguida si está libre."
+    imagen: /fotos/cta.jpg
+    cta: { texto: Consultar disponibilidad, url: "/#contacto" }
+    cta_secundario: { texto: Escribir por WhatsApp, url: "https://wa.me/34684219307" }
+
+  preguntas:
+    activa: true
+    antetitulo: Preguntas frecuentes
+    titulo: Antes de reservar
+    preguntas:
+      - { pregunta: "¿Cuánto tardo en recibir las fotos?", respuesta: "Entre dos y tres semanas para las sesiones y unas seis semanas para las bodas. Te aviso en cuanto la galería está lista." }
+      - { pregunta: "¿Cómo se reserva una fecha?", respuesta: "Con una señal del 30 %, que se descuenta del total. El resto se paga el día de la sesión o, en bodas, la semana anterior." }
+      - { pregunta: "¿Qué pasa si llueve el día de la sesión?", respuesta: "En Gijón pasa. Si la sesión es en exteriores, la movemos sin coste a otro día o la hacemos en el estudio." }
+      - { pregunta: "¿Trabajáis fuera de Gijón?", respuesta: "Sí, en toda Asturias. Fuera de Gijón se suma el desplazamiento, que te indicamos en el presupuesto." }
+      - { pregunta: "¿Puedo pedir las fotos sin editar?", respuesta: "Entrego solo las fotos editadas, porque la edición es parte del trabajo. Si quieres más fotos de las incluidas, se pueden añadir." }
+
+  contacto:
+    activa: true
+    antetitulo: Contacto
+    titulo: Cuéntame tu idea
+    texto: "Te respondo en menos de 24 horas laborables. Si ya tienes fecha, indícala y miro la agenda."
+    boton: Enviar consulta

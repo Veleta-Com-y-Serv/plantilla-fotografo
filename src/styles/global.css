@@ -1,0 +1,140 @@
+/* Fotografía y vídeo — estilo oscuro «hoja de contactos»: bandas a sangre de borde a borde, negro de cuarto
+   oscuro, rótulos en mayúsculas muy pesadas, números de fotograma en monoespaciada, marcas de visor en las
+   fotos y un único acento de luz de seguridad (naranja). Los colores vienen de site.yaml:
+   --c-fondo (fondo general), --c-texto (texto y bandas claras), --c-primario (bandas de color) y
+   --c-acento (botones, banda de la frase). Aguanta un tema claro: todo se deriva con color-mix y la tinta
+   sobre acento y primario se calcula sola (blanca o negra según lo claro que sea el color). */
+@import "tailwindcss";
+@import "./comun.css";
+@config "../../tailwind.config.mjs";
+
+:root {
+  --fuente-texto: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --fuente-titulos: "Arial Black", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --fuente-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --fuente-mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+  --radio: 0; --ritmo: 4.5rem; --ritmo-md: 8rem; --ancho: 90rem;
+  /* Tinta legible sobre el acento y sobre el primario: negra si el color es claro, blanca si es oscuro. */
+  --tinta-acento: #0c0c0d;
+  --tinta-primario: #ffffff;
+  --linea: color-mix(in srgb, currentColor 18%, transparent);
+}
+@supports (color: oklch(from red l c h)) {
+  :root {
+    --tinta-acento: oklch(from var(--c-acento) clamp(0, (0.68 - l) * 1000, 1) 0 0);
+    --tinta-primario: oklch(from var(--c-primario) clamp(0, (0.68 - l) * 1000, 1) 0 0);
+  }
+}
+
+@layer base {
+  body { font-family: var(--fuente-texto); font-size: 1.0625rem; line-height: 1.6; background: var(--c-fondo); }
+  h1, h2, h3 { font-family: var(--fuente-titulos); font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; line-height: .92; }
+  ::selection { background: var(--c-acento); color: var(--tinta-acento); }
+}
+
+@layer components {
+  /* Bandas: cada sección llega de borde a borde con su fondo pleno. */
+  .banda-oscura { background: var(--c-fondo); color: var(--c-texto); }
+  .banda-clara { background: var(--c-texto); color: var(--c-fondo); }
+  .banda-primario { background: var(--c-primario); color: var(--tinta-primario); }
+  .banda-acento { background: var(--c-acento); color: var(--tinta-acento); }
+
+  .mono { font-family: var(--fuente-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+  .serif { font-family: var(--fuente-serif); font-style: italic; font-weight: 400; text-transform: none; letter-spacing: 0; }
+  .suave { opacity: .72; }
+
+  /* Antetítulo: monoespaciada con una línea de color delante. */
+  .antetitulo { font-family: var(--fuente-mono); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; display: flex; align-items: center; gap: .75rem; }
+  .antetitulo::before { content: ""; width: 2.25rem; height: 2px; background: var(--c-acento); flex: none; }
+  .banda-acento .antetitulo::before { background: currentColor; }
+  .titulo-seccion { font-size: clamp(2.25rem, 6.4vw, 5.75rem); margin-top: 1.1rem; }
+  .titular { display: grid; gap: 1.5rem; margin-bottom: 3rem; }
+  @media (min-width: 900px) {
+    .titular { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); align-items: end; column-gap: 4rem; margin-bottom: 4.5rem; }
+    .titular--centro { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+  }
+  .titular-texto { max-width: 34rem; opacity: .75; font-size: 1.05rem; }
+
+  /* Botones: rectángulos rotundos, 48 px de alto. */
+  .btn, .btn-sec { min-height: 3rem; padding: .8rem 1.6rem; font-family: var(--fuente-mono); font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; border-radius: 0; }
+  .btn { background: var(--c-acento); color: var(--tinta-acento); border: 2px solid var(--c-acento); }
+  .btn:hover { background: transparent; color: inherit; }
+  .btn-sec { background: transparent; color: inherit; border: 2px solid currentColor; }
+  .btn-sec:hover { background: color-mix(in srgb, currentColor 14%, transparent); }
+  .banda-acento .btn { background: var(--tinta-acento); color: var(--c-acento); border-color: var(--tinta-acento); }
+  .banda-acento .btn:hover { background: transparent; color: var(--tinta-acento); }
+  .enlace { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .25em; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+  .enlace:hover { text-decoration-color: var(--c-acento); }
+
+  /* Marcas de visor (esquinas) sobre una foto o un bloque. */
+  .visor { position: absolute; inset: var(--visor-margen, 1rem); pointer-events: none; }
+  .visor::before, .visor::after, .visor > span::before, .visor > span::after { content: ""; position: absolute; width: 1.5rem; height: 1.5rem; border: 0 solid var(--visor-color, #fff); }
+  .visor::before { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
+  .visor::after { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
+  .visor > span::before { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
+  .visor > span::after { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
+
+  /* Perforaciones de película (decorativas). */
+  .pelicula { height: 1.25rem; background: repeating-linear-gradient(90deg, transparent 0 .9rem, color-mix(in srgb, currentColor 22%, transparent) .9rem 1.9rem); background-size: 100% .6rem; background-repeat: no-repeat; background-position: 0 50%; }
+
+  /* Número de fotograma enorme en contorno. */
+  .contorno { -webkit-text-fill-color: transparent; -webkit-text-stroke: 1.5px currentColor; }
+  @supports not (-webkit-text-stroke: 1px black) { .contorno { -webkit-text-fill-color: currentColor; opacity: .3; } }
+
+  /* Cabecera «visor»: fija; transparente sobre la foto del hero y sólida al bajar (o siempre sólida). */
+  .cabecera--visor { position: sticky; top: 0; background: var(--c-fondo); color: var(--c-texto); border-bottom: 1px solid color-mix(in srgb, var(--c-texto) 12%, transparent); transition: background-color .25s ease, color .25s ease, border-color .25s ease; }
+  .cabecera--visor.es-transparente { position: fixed; top: 0; inset-inline: 0; background: linear-gradient(rgb(0 0 0 / .55), rgb(0 0 0 / 0)); color: #fff; border-bottom-color: transparent; }
+  .cabecera--visor.es-transparente.es-solida, .cabecera--visor.es-transparente:has(details[open]) { background: var(--c-fondo); color: var(--c-texto); border-bottom-color: color-mix(in srgb, var(--c-texto) 12%, transparent); }
+  .cabecera--visor .contenedor { max-width: none; }
+  .cabecera--visor .cabecera-fila { min-height: 4.5rem; gap: 1.5rem; }
+  .cabecera--visor .marca-inicial { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border: 2px solid currentColor; font-family: var(--fuente-titulos); font-size: 1rem; flex: none; position: relative; }
+  .cabecera--visor .marca-inicial::after { content: ""; position: absolute; top: -5px; right: -5px; width: .55rem; height: .55rem; border-radius: 50%; background: var(--c-acento); }
+  .cabecera--visor .marca-nombre { font-family: var(--fuente-titulos); font-weight: 900; text-transform: uppercase; letter-spacing: .02em; font-size: 1rem; }
+  .cabecera--visor .cabecera-nav { gap: 1.75rem; }
+  .cabecera--visor .cabecera-nav a { font-family: var(--fuente-mono); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; padding-block: .5rem; border-bottom: 2px solid transparent; }
+  .cabecera--visor .cabecera-nav a:hover { border-bottom-color: var(--c-acento); }
+  .cabecera--visor .cabecera-cta { min-height: 2.75rem; padding: .55rem 1.1rem; }
+  @media (min-width: 900px) and (max-width: 1179px) {
+    .cabecera--visor .cabecera-nav { display: none; }
+    .cabecera--visor .menu-movil { display: block; }
+  }
+  .cabecera--visor .menu-movil summary { min-height: 2.75rem; padding: 0 .25rem; font-family: var(--fuente-mono); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; }
+  .cabecera--visor .menu-movil-panel { background: var(--c-fondo); color: var(--c-texto); padding: 1rem 1rem 1.75rem; max-height: calc(100svh - 4.5rem); overflow-y: auto; box-shadow: 0 24px 40px rgb(0 0 0 / .35); }
+  .cabecera--visor .menu-movil-panel a:not(.btn) { font-family: var(--fuente-titulos); font-weight: 900; text-transform: uppercase; font-size: 1.6rem; letter-spacing: -.01em; padding: .7rem 0; }
+  .cabecera--visor .menu-movil-panel .btn { margin-top: 1.25rem; min-height: 3rem; }
+
+  /* Pie «negativo»: banda oscura con el nombre enorme. */
+  .pie--negativo { background: color-mix(in srgb, var(--c-fondo) 88%, #000); color: var(--c-texto); padding-top: 4.5rem; border-top: 1px solid color-mix(in srgb, var(--c-texto) 12%, transparent); }
+  .pie--negativo .pie-rejilla { gap: 2.5rem; }
+  @media (min-width: 768px) { .pie--negativo .pie-rejilla { grid-template-columns: 2fr 1.4fr 1fr 1fr; } }
+  .pie--negativo .pie-nombre { font-family: var(--fuente-titulos); font-weight: 900; text-transform: uppercase; font-size: 1.5rem; letter-spacing: -.01em; }
+  .pie--negativo .pie-titulo { font-family: var(--fuente-mono); letter-spacing: .14em; color: var(--c-acento); opacity: 1; }
+  .pie--negativo .pie-lista a { overflow-wrap: anywhere; }
+  .pie-gigante { font-family: var(--fuente-titulos); font-weight: 900; text-transform: uppercase; line-height: .8; letter-spacing: -.04em; font-size: clamp(3rem, 15vw, 15rem); overflow-wrap: anywhere; margin-top: 3.5rem; padding-bottom: .5rem; color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--c-texto) 35%, transparent); user-select: none; }
+  .pie--negativo .pie-legal { opacity: 1; color: color-mix(in srgb, var(--c-texto) 70%, transparent); margin-top: 0; }
+  .pie--negativo .pie-noexpertise a { color: var(--c-texto); }
+
+  /* Formulario: líneas finas sobre la banda, etiquetas en monoespaciada. */
+  .formulario { gap: 1.25rem; }
+  .formulario .campo label { font-family: var(--fuente-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 400; opacity: .85; }
+  .formulario .campo input, .formulario .campo textarea, .formulario .campo select { width: 100%; font: inherit; color: inherit; min-height: 3rem; background: color-mix(in srgb, currentColor 6%, transparent); border: 0; border-bottom: 2px solid color-mix(in srgb, currentColor 45%, transparent); padding: .7rem .85rem; border-radius: 0; }
+  .formulario .campo select option { color: #111; background: #fff; }
+  .formulario .campo input:focus, .formulario .campo textarea:focus, .formulario .campo select:focus { outline: 2px solid var(--c-acento); outline-offset: 0; border-bottom-color: var(--c-acento); }
+  .formulario .campo-par { display: grid; gap: 1.25rem; }
+  @media (min-width: 640px) { .formulario .campo-par { grid-template-columns: 1fr 1fr; } }
+  .formulario .campo-check { min-height: 2.75rem; align-items: center; }
+  .formulario .campo-check input { width: 1.25rem; height: 1.25rem; margin-top: 0; accent-color: var(--c-acento); flex: none; }
+  .formulario .btn { justify-self: stretch; }
+  @media (min-width: 640px) { .formulario .btn { justify-self: start; } }
+
+  /* Acordeón de preguntas. */
+  .faq summary { list-style: none; cursor: pointer; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq-signo { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 2px solid currentColor; font-family: var(--fuente-mono); font-size: 1.25rem; transition: transform .2s ease, background-color .2s ease; }
+  .faq[open] .faq-signo { transform: rotate(45deg); background: var(--c-acento); border-color: var(--c-acento); color: var(--tinta-acento); }
+  .faq summary:hover .faq-pregunta { color: var(--c-acento); }
+
+  /* Textos largos (aviso legal). */
+  .texto-largo h2 { font-size: 1.35rem; letter-spacing: 0; }
+  .texto-largo p { opacity: .85; }
+}

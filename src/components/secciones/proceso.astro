@@ -1,0 +1,63 @@
+---
+// Proceso: banda oscura con los pasos como fotogramas de una tira de película (perforaciones arriba y abajo,
+// número enorme en contorno, icono, título y texto). `items: [{titulo, texto, icono}]`.
+// 1 columna en móvil, 2 en tableta y tantas como pasos (hasta 4) en escritorio. Sin pasos no se pinta la tira.
+import { seccion, cadena } from '../../data/site';
+import Titular from '../ui/Titular.astro';
+import Icono from '../ui/Icono.astro';
+interface Props { id: string }
+const s = seccion(Astro.props.id);
+const pasos = (s?.items ?? []).filter((p) => cadena(p.titulo) || cadena(p.texto));
+const columnas = Math.min(Math.max(pasos.length, 1), 4);
+---
+
+{
+  s && (
+    <section id={Astro.props.id} class="banda-oscura seccion">
+      <div class="contenedor">
+        <Titular antetitulo={s.antetitulo} titulo={s.titulo} texto={s.texto} />
+      </div>
+      {pasos.length > 0 && (
+        <div class="tira">
+          <span class="pelicula block" aria-hidden="true" />
+          <ol class="contenedor tira-pasos" role="list" style={`--cols:${columnas}`}>
+            {pasos.map((p, i) => (
+              <li class="tira-paso">
+                <div class="flex items-start justify-between gap-4">
+                  <span class="tira-num contorno" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  {p.icono && <Icono nombre={p.icono} tam={28} class="mt-2 text-acento" />}
+                </div>
+                {p.titulo && <h3 class="mt-6 text-2xl md:text-[1.75rem]">{p.titulo}</h3>}
+                {p.texto && <p class="mt-3 opacity-75">{p.texto}</p>}
+              </li>
+            ))}
+          </ol>
+          <span class="pelicula block" aria-hidden="true" />
+        </div>
+      )}
+      {s.cta?.url && (
+        <div class="contenedor mt-12">
+          <a class="btn" href={s.cta.url}>{s.cta.texto}</a>
+        </div>
+      )}
+    </section>
+  )
+}
+
+<style>
+  .tira { border-block: 1px solid color-mix(in srgb, currentColor 18%, transparent); background: color-mix(in srgb, var(--c-texto) 4%, var(--c-fondo)); }
+  .tira-pasos { display: grid; grid-template-columns: 1fr; }
+  .tira-paso { padding: 2rem 0; border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent); }
+  .tira-paso:first-child { border-top: 0; }
+  @media (min-width: 640px) {
+    .tira-pasos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .tira-paso { padding: 2.5rem 2rem 2.5rem 0; border-top: 0; }
+    .tira-paso:nth-child(2n) { padding-left: 2rem; border-left: 1px solid color-mix(in srgb, currentColor 18%, transparent); }
+  }
+  @media (min-width: 1024px) {
+    .tira-pasos { grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); }
+    .tira-paso, .tira-paso:nth-child(2n) { padding: 3rem 2rem; border-left: 1px solid color-mix(in srgb, currentColor 18%, transparent); }
+    .tira-paso:first-child { padding-left: 0; border-left: 0; }
+  }
+  .tira-num { font-family: var(--fuente-titulos); font-weight: 900; font-size: clamp(3.5rem, 6vw, 5.5rem); line-height: .8; }
+</style>

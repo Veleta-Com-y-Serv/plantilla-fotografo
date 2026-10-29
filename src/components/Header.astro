@@ -1,0 +1,62 @@
+---
+// Cabecera «visor»: marca + menú (site.yaml → menu) + botón (boton_cabecera). Fija arriba y a todo el ancho.
+// En la portada, si la primera sección es el hero, empieza transparente sobre la foto y se vuelve sólida al bajar
+// (un script mínimo; sin JavaScript se queda sólida). En móvil, menú plegable sin JavaScript (<details>).
+// El aspecto está en src/styles/global.css (.cabecera--visor).
+import { site, seccionesActivas } from '../data/site';
+import type { Enlace } from '../data/site';
+interface Props { variante?: string; cta?: Enlace | null }
+const { variante = 'visor', cta = null } = Astro.props;
+const enPortada = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+const hero = site.secciones.hero;
+const sobreFoto = enPortada && seccionesActivas()[0] === 'hero' && !!hero?.imagen;
+---
+
+<header class={`cabecera cabecera--${variante}`} data-sobre-foto={sobreFoto ? '' : undefined}>
+  <div class="contenedor cabecera-fila">
+    <a href="/" class="marca" aria-label={`${site.nombre}, inicio`}>
+      {
+        site.logo ? (
+          <img src={site.logo} alt={site.nombre} class="marca-logo" width="160" height="40" />
+        ) : (
+          <>
+            <span class="marca-inicial" aria-hidden="true">{site.nombre.trim().charAt(0)}</span>
+            <span class="marca-nombre">{site.nombre}</span>
+          </>
+        )
+      }
+    </a>
+    <nav class="cabecera-nav" aria-label="Menú principal">
+      {site.menu.map((e) => <a href={e.url}>{e.texto}</a>)}
+    </nav>
+    {cta && cta.url && <a href={cta.url} class="btn cabecera-cta">{cta.texto}</a>}
+    {
+      site.menu.length > 0 && (
+        <details class="menu-movil">
+          <summary>
+            <span class="menu-movil-icono" aria-hidden="true" />
+            <span>Menú</span>
+          </summary>
+          <nav class="menu-movil-panel" aria-label="Menú">
+            {site.menu.map((e) => <a href={e.url}>{e.texto}</a>)}
+            {cta && cta.url && <a href={cta.url} class="btn">{cta.texto}</a>}
+          </nav>
+        </details>
+      )
+    }
+  </div>
+</header>
+<script is:inline>
+  (function () {
+    var h = document.querySelector('.cabecera');
+    if (!h) return;
+    document.querySelectorAll('.menu-movil a').forEach(function (a) {
+      a.addEventListener('click', function () { a.closest('details').open = false; });
+    });
+    if (!h.hasAttribute('data-sobre-foto')) return;
+    h.classList.add('es-transparente');
+    var f = function () { h.classList.toggle('es-solida', window.scrollY > 40); };
+    f();
+    window.addEventListener('scroll', f, { passive: true });
+  })();
+</script>

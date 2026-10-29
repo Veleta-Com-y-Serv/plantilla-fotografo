@@ -1,0 +1,63 @@
+---
+// El estudio: banda de color (primario) partida 50/50 con la foto a sangre a la izquierda y el texto a la
+// derecha; el equipo (`personas`: nombre, cargo, foto) en fila; y la `declaracion` como banda de acento a todo
+// el ancho con la frase enorme. Sin foto, el texto ocupa el ancho; sin declaración, no hay banda de frase.
+import { seccion, site, parrafos, cadena } from '../../data/site';
+import { altSeccion } from '../../lib/seo';
+import Imagen from '../ui/Imagen.astro';
+interface Props { id: string }
+const s = seccion(Astro.props.id);
+const declaracion = cadena(s?.declaracion);
+const personas = (s?.personas ?? []).filter((p) => cadena(p.nombre));
+---
+
+{
+  s && (
+    <section id={Astro.props.id}>
+      <div class:list={['banda-primario grid', s.imagen && 'md:grid-cols-2']}>
+        {s.imagen && (
+          <div class="relative min-h-[22rem] md:min-h-[40rem]">
+            <Imagen src={s.imagen} alt={altSeccion(s)} ancho={1200} alto={1400} class="absolute inset-0 h-full w-full object-cover" />
+          </div>
+        )}
+        <div class:list={['px-4 py-16 md:px-12 md:py-24 lg:px-20', !s.imagen && 'contenedor']}>
+          <div class="max-w-2xl">
+            {s.antetitulo && <p class="antetitulo">{s.antetitulo}</p>}
+            {s.titulo && <h2 class="titulo-seccion sobre-titulo">{s.titulo}</h2>}
+            <div class="mt-8 space-y-4 text-lg opacity-85">
+              {parrafos(s.texto).map((p) => <p>{p}</p>)}
+            </div>
+            {personas.length > 0 && (
+              <ul class="mt-12 grid gap-6 sm:grid-cols-2" role="list">
+                {personas.map((p) => (
+                  <li class="flex items-center gap-4 border-t border-current/20 pt-4">
+                    {p.foto && <Imagen src={p.foto} alt={p.nombre} ancho={120} alto={150} class="h-20 w-16 flex-none object-cover grayscale" />}
+                    <div>
+                      <p class="font-bold uppercase tracking-wide">{p.nombre}</p>
+                      {p.cargo && <p class="mono mt-1 opacity-70">{p.cargo}</p>}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {s.cta?.url && <a class="btn mt-10" href={s.cta.url}>{s.cta.texto}</a>}
+          </div>
+        </div>
+      </div>
+      {declaracion && (
+        <div class="banda-acento">
+          <figure class="contenedor py-20 md:py-32">
+            <span class="sobre-comilla" aria-hidden="true">&ldquo;</span>
+            <blockquote class="serif max-w-6xl text-[clamp(2rem,5.2vw,4.75rem)] leading-[1.08]">{declaracion}</blockquote>
+            <figcaption class="mono mt-8">— {site.nombre}</figcaption>
+          </figure>
+        </div>
+      )}
+    </section>
+  )
+}
+
+<style>
+  .sobre-titulo { font-size: clamp(2.25rem, 4.6vw, 4.5rem); }
+  .sobre-comilla { display: block; font-family: var(--fuente-titulos); font-size: clamp(6rem, 14vw, 11rem); line-height: .6; height: .45em; }
+</style>

@@ -1,0 +1,55 @@
+---
+// Opiniones: banda clara; la primera opinión como cita enorme en serif y el resto en columnas separadas por
+// filetes (sin tarjetas). `testimonios: [{texto, autor, nota}]`. Sin testimonios no se pinta
+// (la plataforma nunca inventa opiniones).
+import { seccion, cadena } from '../../data/site';
+import Titular from '../ui/Titular.astro';
+interface Props { id: string }
+const s = seccion(Astro.props.id);
+const lista = (s?.testimonios ?? []).filter((t) => cadena(t.texto));
+const [primera, ...resto] = lista;
+---
+
+{
+  s && lista.length > 0 && (
+    <section id={Astro.props.id} class="banda-clara seccion">
+      <div class="contenedor">
+        <Titular antetitulo={s.antetitulo} titulo={s.titulo} texto={s.texto} />
+        <figure class="grid gap-6 md:grid-cols-12">
+          <span class="opinion-comilla md:col-span-2" aria-hidden="true">&ldquo;</span>
+          <div class="md:col-span-10">
+            <blockquote class="serif text-[clamp(1.75rem,4.2vw,3.6rem)] leading-[1.12]">{primera.texto}</blockquote>
+            <figcaption class="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              {cadena(primera.autor) && <span class="font-bold uppercase tracking-wide">{primera.autor}</span>}
+              {cadena(primera.nota) && <span class="mono opacity-70">{primera.nota}</span>}
+            </figcaption>
+          </div>
+        </figure>
+        {resto.length > 0 && (
+          <ul class="opiniones-resto mt-16 grid md:mt-24 md:grid-cols-3" role="list">
+            {resto.map((t) => (
+              <li>
+                <figure>
+                  <blockquote class="text-lg leading-relaxed">{t.texto}</blockquote>
+                  <figcaption class="mt-6">
+                    {cadena(t.autor) && <span class="block font-bold uppercase tracking-wide">{t.autor}</span>}
+                    {cadena(t.nota) && <span class="mono mt-1 block opacity-70">{t.nota}</span>}
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .opinion-comilla { font-family: var(--fuente-titulos); font-size: clamp(6rem, 12vw, 12rem); line-height: .7; color: var(--c-acento); height: .5em; }
+  .opiniones-resto > li { padding: 2rem 0; border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+  @media (min-width: 768px) {
+    .opiniones-resto > li { padding: 2rem 2.5rem; border-top: 0; border-left: 1px solid color-mix(in srgb, currentColor 22%, transparent); }
+    .opiniones-resto > li:nth-child(3n + 1) { padding-left: 0; border-left: 0; }
+  }
+</style>

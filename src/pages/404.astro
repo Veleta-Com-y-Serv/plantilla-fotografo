@@ -1,0 +1,17 @@
+---
+// Página 404 con el diseño de la plantilla: banda oscura a pantalla casi completa con el número en contorno.
+import Base from '../layouts/Base.astro';
+---
+
+<Base titulo="Página no encontrada">
+  <section class="banda-oscura relative isolate overflow-hidden">
+    <div class="visor hidden md:block" aria-hidden="true" style="--visor-margen: 2rem; --visor-color: var(--c-acento)"><span /></div>
+    <div class="contenedor flex min-h-[80svh] flex-col justify-center py-20">
+      <p class="antetitulo">Error 404</p>
+      <p class="contorno mt-6 font-display text-[clamp(7rem,30vw,22rem)] font-black leading-[.8]" aria-hidden="true">404</p>
+      <h1 class="titulo-seccion mt-8">Esta página no existe</h1>
+      <p class="mt-6 max-w-lg text-lg opacity-80">Puede que el enlace esté mal o que la página se haya movido.</p>
+      <p class="mt-10"><a class="btn" href="/">Volver al inicio</a></p>
+    </div>
+  </section>
+</Base>
