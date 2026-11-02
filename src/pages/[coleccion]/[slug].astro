@@ -1,0 +1,203 @@
+---
+// Ficha de un elemento con `detalle` (src/lib/paginas.ts, listas de src/data/fichas.ts): /sesiones/<slug>/.
+// Diseño «cuarto oscuro»: banda negra con migas y hero a sangre (título en mayúsculas, precio en cursiva, botones; la foto
+// toca el borde con marcas de visor); banda clara con el `detalle` y, al lado, la ficha de datos con filas de cuadradito
+// de acento y caja de reserva; tira de fotos (`imagenes`) a borde completo; y otras sesiones en banda oscura.
+import Base from '../../layouts/Base.astro';
+import Imagen from '../../components/ui/Imagen.astro';
+import Icono from '../../components/ui/Icono.astro';
+import { site, tel, whatsapp } from '../../data/site';
+import { fichas, relacionadas, resumen } from '../../lib/paginas';
+import type { Ficha } from '../../lib/paginas';
+import { altGaleria, jsonLdFicha, jsonLdMigas, urlBase } from '../../lib/seo';
+
+export function getStaticPaths() {
+  return fichas().map((f) => ({ params: { coleccion: f.def.ruta, slug: f.slug }, props: { f } }));
+}
+
+interface Props { f: Ficha }
+const { f } = Astro.props;
+const base = urlBase(Astro.site);
+const nombreSeccion = String(f.seccion.antetitulo || f.seccion.titulo || f.def.nombre).trim();
+const migas = [
+  { nombre: 'Inicio', ruta: '/' },
+  { nombre: nombreSeccion, ruta: `/#${f.idSeccion}` },
+  { nombre: f.titulo, ruta: f.url },
+];
+const c = site.contacto;
+const reserva = site.boton_cabecera?.url || '/#contacto';
+const textoReserva = site.boton_cabecera?.texto || 'Reservar fecha';
+const wa = whatsapp(c.whatsapp, `Hola, quiero información sobre ${f.titulo}`);
+const duracion = f.datos.find((d) => d.clave === 'duracion')?.valor ?? '';
+const incluye = f.datos.find((d) => d.clave === 'incluye')?.valor ?? '';
+const datos = f.datos.filter((d) => !['precio', 'duracion', 'incluye'].includes(d.clave));
+const lista = incluye.split(/\s*[;\n]\s*/).map((t) => t.trim()).filter(Boolean);
+const otras = relacionadas(f, 3);
+const descripcion = resumen(f.texto || f.detalle[0] || '');
+---
+
+<Base titulo={f.titulo} descripcion={descripcion} imagen={f.imagen} ld={[jsonLdMigas(base, migas), jsonLdFicha(base, f)]}>
+  <section class="banda-oscura ficha-cabeza">
+    <div class="contenedor">
+      <nav aria-label="Migas de pan" class="migas mono">
+        <ol>
+          {migas.map((m, i) => (
+            <li>{i < migas.length - 1 ? <a href={m.ruta}>{m.nombre}</a> : <span aria-current="page">{m.nombre}</span>}</li>
+          ))}
+        </ol>
+      </nav>
+    </div>
+    <div class:list={['ficha-hero', { 'ficha-hero--sin-foto': !f.imagen }]}>
+      <div class="ficha-hero-texto">
+        <p class="antetitulo">{f.categoria || f.def.nombre}</p>
+        <h1 class="ficha-titulo">{f.titulo}</h1>
+        {f.precio && <p class="ficha-precio serif">{f.precio}</p>}
+        {f.texto && <p class="ficha-texto">{f.texto}</p>}
+        {duracion && <p class="mono ficha-duracion"><Icono nombre="reloj" tam={14} /> {duracion}</p>}
+        <div class="ficha-botones">
+          <a class="btn" href={reserva}>{textoReserva}</a>
+          {wa && <a class="btn-sec" href={wa} target="_blank" rel="noopener"><Icono nombre="whatsapp" tam={18} /> WhatsApp</a>}
+        </div>
+      </div>
+      {f.imagen && (
+        <div class="ficha-foto">
+          <Imagen src={f.imagen} alt={f.titulo} ancho={1200} alto={900} prioridad class="absolute inset-0 h-full w-full object-cover" />
+          <div class="visor" aria-hidden="true"><span /></div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="banda-clara">
+    <div class="contenedor ficha-cuerpo">
+      <article class="ficha-detalle">
+        {f.detalle.map((p) => <p>{p}</p>)}
+      </article>
+      <aside class="ficha-lado">
+        {(datos.length > 0 || f.precio || duracion || lista.length > 0) && (
+          <div class="ficha-datos">
+            <h2 class="ficha-lado-titulo mono">En pocas palabras</h2>
+            <dl>
+              {f.precio && <div><dt>Precio</dt><dd class="serif ficha-dato-precio">{f.precio}</dd></div>}
+              {duracion && <div><dt>Duración</dt><dd>{duracion}</dd></div>}
+              {datos.map((d) => <div><dt>{d.etiqueta}</dt><dd>{d.valor}</dd></div>)}
+            </dl>
+            {lista.length > 0 && (
+              <>
+                <h3 class="ficha-incluye-titulo mono">Incluye</h3>
+                <ul class="ficha-incluye">
+                  {lista.map((t) => <li>{t}</li>)}
+                </ul>
+              </>
+            )}
+          </div>
+        )}
+        <div class="ficha-reserva">
+          <p class="ficha-reserva-titulo">¿Hablamos de tu sesión?</p>
+          <p>Cuéntame qué buscas y te preparo un presupuesto sin compromiso.</p>
+          <a class="btn" href={reserva}>{textoReserva}</a>
+          {c.telefono && <a class="ficha-tel mono" href={tel(c.telefono)}><Icono nombre="telefono" tam={18} /> {c.telefono}</a>}
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {f.imagenes.length > 0 && (
+    <section class="banda-oscura ficha-tira" aria-label={`Fotos de ${f.titulo}`}>
+      <ul class="ficha-galeria">
+        {f.imagenes.map((src, i) => (
+          <li><Imagen src={src} alt={`${f.titulo}: ${altGaleria(i).toLowerCase()}`} ancho={800} alto={600} class="absolute inset-0 h-full w-full object-cover" /></li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {otras.length > 0 && (
+    <section class="banda-oscura ficha-otras-banda">
+      <div class="contenedor">
+        <p class="antetitulo">{nombreSeccion}</p>
+        <h2 class="titulo-seccion">Otras sesiones</h2>
+        <ul class="ficha-otras">
+          {otras.map((o, i) => (
+            <li class="ficha-otra">
+              <span class="ficha-otra-num contorno" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3><a href={o.url} class="ficha-otra-enlace">{o.titulo}</a></h3>
+              {o.texto && <p>{o.texto}</p>}
+              <p class="ficha-otra-pie">
+                {o.precio && <span class="serif ficha-otra-precio">{o.precio}</span>}
+                <span class="ficha-otra-ver mono" aria-hidden="true">Ver <Icono nombre="flecha" tam={16} /></span>
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-10"><a class="btn-sec" href={`/#${f.idSeccion}`}>Ver todas las sesiones</a></p>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .ficha-cabeza { padding-block: 1.25rem clamp(3rem, 6vw, 5rem); }
+  .migas ol { display: flex; flex-wrap: wrap; gap: .25rem .5rem; }
+  .migas li { display: inline-flex; align-items: center; gap: .5rem; min-width: 0; }
+  .migas li + li::before { content: "/"; opacity: .5; }
+  .migas a { min-height: 2.75rem; display: inline-flex; align-items: center; text-decoration: none; opacity: .8; }
+  .migas a:hover { color: var(--c-acento); opacity: 1; }
+  .migas [aria-current] { opacity: .6; overflow-wrap: anywhere; }
+  .ficha-hero { display: grid; gap: 2.5rem; margin-top: clamp(.5rem, 2vw, 1.5rem); }
+  .ficha-hero-texto { padding-inline: 1rem; max-width: 46rem; }
+  .ficha-titulo { font-size: clamp(2.5rem, 9vw, 6.5rem); margin-top: 1.1rem; overflow-wrap: anywhere; }
+  .ficha-precio { font-size: clamp(1.6rem, 3vw, 2.4rem); margin-top: 1.5rem; color: color-mix(in srgb, var(--c-acento) 70%, currentColor); }
+  .ficha-texto { margin-top: 1.25rem; max-width: 34rem; opacity: .85; font-size: 1.15rem; }
+  .ficha-duracion { display: flex; align-items: center; gap: .5rem; margin-top: 1.5rem; }
+  .ficha-botones { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+  .ficha-botones a { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; }
+  .ficha-foto { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; }
+  .ficha-foto :global(.visor) { --visor-margen: 1rem; }
+  .ficha-cuerpo { display: grid; gap: 3rem; padding-block: clamp(3rem, 7vw, 6rem); }
+  .ficha-detalle { max-width: 44rem; font-size: 1.12rem; }
+  .ficha-detalle p + p { margin-top: 1.2rem; }
+  .ficha-detalle p:first-child { font-family: var(--fuente-serif); font-style: italic; font-size: 1.4rem; line-height: 1.45; }
+  .ficha-lado { display: grid; gap: 1.5rem; align-content: start; }
+  .ficha-datos { border: 2px solid currentColor; padding: 1.5rem; }
+  .ficha-lado-titulo { margin-bottom: 1rem; font-weight: 400; }
+  .ficha-datos dl > div { display: flex; justify-content: space-between; gap: 1rem; padding: .8rem 0; border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent); }
+  .ficha-datos dt { font-family: var(--fuente-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; opacity: .7; padding-top: .2rem; }
+  .ficha-datos dd { text-align: right; font-weight: 650; min-width: 0; overflow-wrap: anywhere; }
+  .ficha-dato-precio { font-size: 1.4rem; }
+  .ficha-incluye-titulo { margin-top: 1.5rem; font-weight: 400; }
+  .ficha-incluye li { display: flex; gap: .75rem; padding-block: .6rem; border-top: 1px solid color-mix(in srgb, currentColor 15%, transparent); font-size: .95rem; }
+  .ficha-incluye li::before { content: ""; flex: none; width: .5rem; height: .5rem; margin-top: .55rem; background: var(--c-acento); }
+  .ficha-reserva { display: grid; gap: .9rem; padding: 1.75rem 1.5rem; background: var(--c-fondo); color: var(--c-texto); }
+  .ficha-reserva-titulo { font-family: var(--fuente-titulos); font-weight: 900; text-transform: uppercase; font-size: 1.6rem; line-height: .95; letter-spacing: -.02em; }
+  .ficha-reserva .btn { display: inline-flex; align-items: center; justify-content: center; }
+  .ficha-tel { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; text-decoration: none; }
+  .ficha-tira { border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent); }
+  .ficha-galeria { display: grid; grid-template-columns: 1fr; }
+  .ficha-galeria li { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }
+  .ficha-otras-banda { padding-block: var(--ritmo); border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent); }
+  .ficha-otras { display: grid; gap: 1px; margin-top: 2.5rem; background: color-mix(in srgb, currentColor 20%, transparent); border: 1px solid color-mix(in srgb, currentColor 20%, transparent); grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); }
+  .ficha-otra { position: relative; display: flex; flex-direction: column; gap: .7rem; padding: 1.5rem; background: var(--c-fondo); transition: background-color .2s ease; }
+  .ficha-otra:hover { background: color-mix(in srgb, var(--c-acento) 10%, var(--c-fondo)); }
+  .ficha-otra-num { font-family: var(--fuente-titulos); font-weight: 900; font-size: 3.5rem; line-height: .8; }
+  .ficha-otra h3 { font-size: 1.5rem; overflow-wrap: anywhere; }
+  .ficha-otra-enlace { text-decoration: none; color: inherit; }
+  .ficha-otra-enlace::after { content: ""; position: absolute; inset: 0; }
+  .ficha-otra-enlace:focus-visible { outline: none; }
+  .ficha-otra:has(.ficha-otra-enlace:focus-visible) { outline: 2px solid var(--c-acento); outline-offset: -2px; }
+  .ficha-otra p { opacity: .8; }
+  .ficha-otra-pie { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: auto; padding-top: .5rem; opacity: 1 !important; }
+  .ficha-otra-precio { font-size: 1.25rem; color: color-mix(in srgb, var(--c-acento) 70%, currentColor); }
+  .ficha-otra-ver { display: inline-flex; align-items: center; gap: .3rem; color: var(--c-acento); }
+  @media (min-width: 768px) {
+    .ficha-galeria { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1024px) {
+    .ficha-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+    .ficha-hero-texto { padding-inline: clamp(2rem, 5vw, 6rem) 2rem; justify-self: end; }
+    .ficha-foto { aspect-ratio: auto; min-height: 36rem; height: 100%; }
+    .ficha-hero--sin-foto { grid-template-columns: 1fr; }
+    .ficha-cuerpo { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 5rem; align-items: start; }
+    .ficha-lado { position: sticky; top: 6.5rem; }
+  }
+</style>

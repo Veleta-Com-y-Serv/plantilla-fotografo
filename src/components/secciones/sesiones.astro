@@ -2,9 +2,12 @@
 // Sesiones: banda clara con filas 50/50 en zigzag; la foto toca el borde de la ventana y lleva marcas de visor.
 // Lista propia `sesiones: [{nombre, texto, precio, duracion, incluye, imagen, destacado}]`
 // (`incluye` con «;»). Sin precio no hay precio; sin foto, la ficha ocupa el ancho del contenido.
+// Las sesiones con `detalle` tienen página propia (/sesiones/<nombre>/) y enlazan a ella con «Ver más».
 // `destacado: true` marca la sesión con una franja de acento. `cta` opcional al final.
 import { seccion, cadena, trozos } from '../../data/site';
 import { altFicha } from '../../lib/seo';
+import { enlaceDe } from '../../lib/paginas';
+import Icono from '../ui/Icono.astro';
 import Titular from '../ui/Titular.astro';
 import Imagen from '../ui/Imagen.astro';
 interface Props { id: string }
@@ -24,7 +27,7 @@ const lista = (s?.sesiones ?? []).filter((x) => cadena(x.nombre));
             const incluye = trozos(x.incluye);
             const derecha = i % 2 === 1;
             return (
-              <li class:list={['sesion', { 'sesion--sin-foto': !x.imagen, 'sesion--derecha': derecha, 'sesion--destacada': x.destacado === true }]}>
+              <li class:list={['sesion', { 'sesion--enlace': !!enlaceDe(x) }, { 'sesion--sin-foto': !x.imagen, 'sesion--derecha': derecha, 'sesion--destacada': x.destacado === true }]}>
                 {x.imagen && (
                   <div class="sesion-foto">
                     <Imagen src={x.imagen} alt={altFicha(x)} ancho={1200} alto={900} class="absolute inset-0 h-full w-full object-cover" />
@@ -41,7 +44,7 @@ const lista = (s?.sesiones ?? []).filter((x) => cadena(x.nombre));
                       </p>
                     )}
                   </div>
-                  <h3 class="mt-4 text-[clamp(1.9rem,4vw,3.25rem)]">{x.nombre}</h3>
+                  <h3 class="mt-4 text-[clamp(1.9rem,4vw,3.25rem)]">{enlaceDe(x) ? <a href={enlaceDe(x)} class="sesion-enlace">{x.nombre}</a> : x.nombre}</h3>
                   {cadena(x.precio) && <p class="sesion-precio serif mt-3">{x.precio}</p>}
                   {cadena(x.texto) && <p class="mt-5 max-w-lg opacity-80">{x.texto}</p>}
                   {incluye.length > 0 && (
@@ -51,6 +54,7 @@ const lista = (s?.sesiones ?? []).filter((x) => cadena(x.nombre));
                       ))}
                     </ul>
                   )}
+                  {enlaceDe(x) && <span class="sesion-ver mono mt-6" aria-hidden="true">Ver más <Icono nombre="flecha" tam={16} /></span>}
                 </div>
               </li>
             );
@@ -65,6 +69,12 @@ const lista = (s?.sesiones ?? []).filter((x) => cadena(x.nombre));
 }
 
 <style>
+  .sesion--enlace { position: relative; }
+  .sesion-enlace { text-decoration: none; color: inherit; }
+  .sesion-enlace::after { content: ""; position: absolute; inset: 0; }
+  .sesion-enlace:focus-visible { outline: none; }
+  .sesion--enlace:has(.sesion-enlace:focus-visible) { outline: 2px solid var(--c-acento); outline-offset: -4px; }
+  .sesion-ver { display: inline-flex; align-items: center; gap: .4rem; color: color-mix(in srgb, var(--c-acento) 70%, currentColor); }
   .sesiones { border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent); }
   .sesion { display: grid; border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent); }
   .sesion-foto { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; }

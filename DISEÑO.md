@@ -57,3 +57,6 @@ la plantilla.
 - [x] `fotos.json` y placeholders SVG con el mismo nombre.
 - [x] `README.md` y `CLAUDE.md`.
 - [ ] Fotos y previews (`preview/card.jpg`, `preview/full.jpg`) definitivas: las hace el paso de fotos.
+
+## Páginas propias (fichas)
+Diseño «cuarto oscuro»: banda negra con migas y hero a sangre (título en mayúsculas, precio en cursiva de acento, foto con marcas de visor), banda clara con el detalle y, al lado, ficha de datos con borde grueso y caja de reserva negra; tira de fotos a borde completo y otras sesiones en rejilla de filetes finos con números de contorno.

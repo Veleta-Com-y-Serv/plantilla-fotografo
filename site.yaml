@@ -67,10 +67,58 @@ secciones:
     titulo: Elige tu sesión
     texto: "Precios orientativos con IVA incluido. Si buscas algo distinto, cuéntamelo y te preparo un presupuesto."
     sesiones:
-      - { nombre: Retrato en estudio, texto: "Una hora tranquila con fondo de papel y luz suave. Para perfiles profesionales, actores o simplemente para tener una foto bonita.", precio: "desde 120 €", duracion: "1 hora", incluye: "Estudio en Cimadevilla; Dos cambios de ropa; 15 fotos editadas; Galería privada en línea", imagen: /fotos/sesion-retrato.jpg, destacado: false }
-      - { nombre: Familia en la playa, texto: "Al atardecer en San Lorenzo o en el Cerro de Santa Catalina. Sin poses forzadas: jugáis, paseáis y yo voy contando la tarde.", precio: "desde 180 €", duracion: "90 minutos", incluye: "Sesión en exteriores de Gijón; 30 fotos editadas; Galería privada para compartir; Copia impresa de regalo", imagen: /fotos/sesion-familia.jpg, destacado: true }
-      - { nombre: Boda, texto: "De los preparativos al primer baile, con discreción. Conozco las fincas y los llagares de la zona y sé cómo cambia aquí la luz.", precio: "desde 1.450 €", duracion: "Día completo", incluye: "Reunión previa y visita al lugar; Reportaje de todo el día; 400 fotos editadas; Álbum de lino de 30 × 30", imagen: /fotos/sesion-boda.jpg, destacado: false }
-      - { nombre: Vídeo para empresas, texto: "Piezas cortas para tu web y tus redes: el taller, el equipo, el producto. Con guion sencillo y sonido cuidado.", precio: "desde 650 €", duracion: "Media jornada", incluye: "Guion y localización; Grabación y sonido; Pieza principal de 90 segundos; Tres cortes verticales para redes", imagen: /fotos/sesion-video.jpg, destacado: false }
+      - nombre: Retrato en estudio
+        texto: "Una hora tranquila con fondo de papel y luz suave. Para perfiles profesionales, actores o simplemente para tener una foto bonita."
+        precio: "desde 120 €"
+        duracion: "1 hora"
+        incluye: "Estudio en Cimadevilla; Dos cambios de ropa; 15 fotos editadas; Galería privada en línea"
+        imagen: /fotos/sesion-retrato.jpg
+        destacado: false
+        detalle: |
+          Es una sesión pensada para quien necesita una buena foto sin pasar un mal rato delante de la cámara. Nos vemos en el estudio de Cimadevilla, con fondo de papel y una luz suave que favorece sin falsear. Empezamos charlando un rato para que te sueltes y veamos qué quieres transmitir: algo cercano para un perfil profesional, algo más serio para un currículum artístico o simplemente un retrato bonito para ti.
+
+          Te guío en cada postura con indicaciones sencillas, sin poses de catálogo. Puedes traer dos cambios de ropa y, si lo prefieres, te recomiendo antes qué colores y tejidos funcionan mejor con el fondo y la luz del estudio.
+
+          Después elijo y edito con calma las mejores imágenes, cuidando la piel y el color para que sigas pareciéndote a ti. Las recibes en una galería privada en línea, lista para descargar y usar donde quieras.
+      - nombre: Familia en la playa
+        texto: "Al atardecer en San Lorenzo o en el Cerro de Santa Catalina. Sin poses forzadas: jugáis, paseáis y yo voy contando la tarde."
+        precio: "desde 180 €"
+        duracion: "90 minutos"
+        incluye: "Sesión en exteriores de Gijón; 30 fotos editadas; Galería privada para compartir; Copia impresa de regalo"
+        imagen: /fotos/sesion-familia.jpg
+        destacado: true
+        detalle: |
+          Una tarde en la playa de San Lorenzo o en el Cerro de Santa Catalina, cuando la luz del atardecer se vuelve dorada y todo el mundo está más relajado. No hay guion ni poses forzadas: jugáis, paseáis, os mojáis los pies y yo me muevo alrededor contando la tarde tal como ocurre.
+
+          Es una sesión pensada para familias con niños de cualquier edad, también con abuelos o con la mascota. Antes de la cita hablamos del lugar, la hora más adecuada según la marea y el tiempo, y qué ropa os hará sentir cómodos. Si el día se pone feo, buscamos otra fecha sin coste.
+
+          Tras la sesión selecciono y edito las mejores fotos, con un tratamiento de color cálido y natural. Las recibes en una galería privada que podéis compartir con la familia, y te regalo una copia impresa para que alguna foto salga de la pantalla y llegue a la pared de casa.
+      - nombre: Boda
+        texto: "De los preparativos al primer baile, con discreción. Conozco las fincas y los llagares de la zona y sé cómo cambia aquí la luz."
+        precio: "desde 1.450 €"
+        duracion: "Día completo"
+        incluye: "Reunión previa y visita al lugar; Reportaje de todo el día; 400 fotos editadas; Álbum de lino de 30 × 30"
+        imagen: /fotos/sesion-boda.jpg
+        destacado: false
+        detalle: |
+          Una boda es un día largo y lleno de emociones, y mi trabajo es que lo recuerdes entero sin que yo te estorbe. Antes del día nos reunimos para conocernos, repasar cómo será la jornada y visitar juntos el lugar. Conozco muchas de las fincas y los llagares de la zona y sé cómo cambia aquí la luz según la hora y la estación.
+
+          El reportaje empieza en los preparativos y sigue con la ceremonia, los abrazos, el banquete y el primer baile. Trabajo con discreción, sin interrumpir los momentos, y reservo un rato tranquilo para los retratos de los novios y de las familias, con indicaciones mínimas y mucho cariño.
+
+          Después llega la edición, que hago yo misma, imagen a imagen. Recibes la galería privada con todas las fotos listas para compartir y, además, un álbum de lino cosido a mano que diseñamos juntos con las imágenes que más os emocionen.
+      - nombre: Vídeo para empresas
+        texto: "Piezas cortas para tu web y tus redes: el taller, el equipo, el producto. Con guion sencillo y sonido cuidado."
+        precio: "desde 650 €"
+        duracion: "Media jornada"
+        incluye: "Guion y localización; Grabación y sonido; Pieza principal de 90 segundos; Tres cortes verticales para redes"
+        imagen: /fotos/sesion-video.jpg
+        destacado: false
+        detalle: |
+          Pensado para talleres, restaurantes, tiendas y pequeños negocios que quieren enseñar lo que hacen con calidad y sin complicaciones. Empezamos con una conversación sobre qué quieres contar, a quién y dónde se va a ver, y de ahí sale un guion sencillo y una lista de planos para que la grabación sea ágil y no pare tu actividad.
+
+          Grabamos en tu local o donde ocurra el trabajo, con cuidado especial por el sonido, que es lo que más delata un vídeo hecho a la ligera. Si hay personas hablando a cámara, las acompañamos para que se sientan cómodas y salgan naturales.
+
+          En el montaje preparo la pieza principal para tu web y varios cortes verticales pensados para redes sociales, con rótulos claros y música libre de derechos. Antes de entregarlo lo revisas conmigo y ajustamos lo necesario para que quedes satisfecho.
     cta: { texto: Pedir presupuesto, url: "/#contacto" }
 
   sobre:
