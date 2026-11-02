@@ -20,7 +20,7 @@ secciones:
   - { id: contacto, nombre: Contacto }
 estilo: oscuro
 plan_minimo: gratis
-version: 1.1.0
+version: 1.1.1
 base: astrowind
 demo_url: https://demo-plantilla-fotografo.noexpertise.com
 activa: true
