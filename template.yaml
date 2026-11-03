@@ -20,7 +20,7 @@ secciones:
   - { id: contacto, nombre: Contacto }
 estilo: oscuro
 plan_minimo: gratis
-version: 1.1.1
+version: 1.2.0
 base: astrowind
 demo_url: https://demo-plantilla-fotografo.noexpertise.com
 activa: true
@@ -29,6 +29,13 @@ orden: 210
 # Páginas propias (docs/plantillas.md § Fichas por elemento y páginas por zona). Espejo en src/data/fichas.ts.
 fichas:
   - { lista: sesiones, campo: sesiones, ruta: sesiones, nombre: Sesión, tipo: Service }
+
+# Varias páginas (docs/plantillas.md § Varias páginas): reparto recomendado al activar «Varias páginas».
+# Inicio se queda con la portada y lo que no esté en ninguna página (aquí, trabajo, llamada a la acción).
+paginas:
+  - { ruta: sesiones, titulo: Sesiones, secciones: "sesiones" }
+  - { ruta: sobre-mi, titulo: Sobre mí, secciones: "sobre; proceso; opiniones" }
+  - { ruta: contacto, titulo: Contacto, secciones: "preguntas; contacto" }
 
 # Asistente de puesta en marcha (NoExpertise): un paso por pantalla. Rutas del site sin índices;
 # tipos: texto y lista (la IA propone), datos, fotos, eleccion (colores y logo) y repaso.

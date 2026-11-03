@@ -9,6 +9,7 @@ Web oscura para fotógrafos y productoras de vídeo, con galería a borde comple
   foto tocando el borde. Móvil primero, sin scroll horizontal a 375 px.
 - Ejemplo: Nordés Estudio, estudio ficticio de fotografía y vídeo en Gijón.
 - SEO de base incluido (`src/lib/seo.ts`): canónica, og:image, JSON-LD del negocio y de las preguntas frecuentes,
+- Varias páginas (opcional, `paginas:` en la raíz de `site.yaml`): Inicio + una página por entrada (`{ ruta, titulo, secciones: "a; b" }`, hasta 6) con el menú hecho solo; reparto recomendado en `template.yaml → paginas`. Sin la clave, una sola página larga.
   `robots.txt`, `sitemap.xml` y `llms.txt`; `noindex` si `seo.indexable: false`.
 - Contenido editable en `site.yaml`; metadatos y guion del asistente en `template.yaml`; fotos a generar en
   `fotos.json`; reglas para el agente en `CLAUDE.md`; brief de diseño en `DISEÑO.md`.
